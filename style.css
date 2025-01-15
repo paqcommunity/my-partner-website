@@ -160,3 +160,24 @@ button:hover {
 .delete-update:hover {
   background-color: #cc0000;
 }
+
+/* More Things Coming Soon Section */
+#coming-soon {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffefec; /* Light pinkish background */
+  color: #333; /* Dark text for contrast */
+  font-size: 1.2rem;
+  margin-top: 20px;
+  border: 2px dashed #ff9a8b; /* Cute dashed border */
+  border-radius: 10px;
+}
+
+#coming-soon h2 {
+  font-size: 2rem;
+  color: #e57373; /* Soft red for the heading */
+}
+
+#coming-soon p {
+  margin: 10px 0 0;
+}
