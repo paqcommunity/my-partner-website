@@ -42,16 +42,32 @@ document.getElementById('update-form').addEventListener('submit', function(event
   event.preventDefault(); // Prevent page refresh on form submission
 
   const updateText = document.getElementById('new-update').value;
+  const photoFile = document.getElementById('new-photo').files[0];
+
   const updatesList = document.getElementById('updates-list');
 
   // Create a new div for the update
   const updateDiv = document.createElement('div');
   updateDiv.classList.add('update');
+  
+  // Add text content
   updateDiv.textContent = updateText;
+
+  // Handle file upload if available
+  if (photoFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      updateDiv.appendChild(img);
+    };
+    reader.readAsDataURL(photoFile);
+  }
 
   // Append the new update to the list
   updatesList.appendChild(updateDiv);
 
-  // Clear the textarea after submission
+  // Clear the form after submission
   document.getElementById('new-update').value = '';
+  document.getElementById('new-photo').value = '';
 });

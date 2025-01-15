@@ -15,19 +15,19 @@
 
   <!-- Timeline Section -->
   <section id="timeline">
-    <h2>year 2025</h2>
+    <h2>Year 2025</h2>
     <div class="timeline">
       <div class="event">
         <h3>First Meeting</h3>
-        <p>let's create memories!</p>
+        <p>Let's create memories!</p>
       </div>
       <!-- Add more events here -->
     </div>
   </section>
 
-  <!-- Monthly Photo Gallery -->
+  <!-- Monthly Photo Gallery Section -->
   <section id="monthly-photos">
-    <h2>Favorite Photos</h2>
+    <h2>My Favorite Photos of Yours This Month</h2>
     <div id="photo-calendar">
       <div class="month" onclick="loadPhotos('january')">
         <h3>January 2025</h3>
@@ -41,42 +41,7 @@
         <h3>March 2025</h3>
         <img src="images/march/thumbnail.jpg" alt="March Photo">
       </div>
-      <div class="month" onclick="loadPhotos('april')">
-        <h3>April 2025</h3>
-        <img src="images/april/thumbnail.jpg" alt="April Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('may')">
-        <h3>May 2025</h3>
-        <img src="images/may/thumbnail.jpg" alt="May Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('june')">
-        <h3>June 2025</h3>
-        <img src="images/june/thumbnail.jpg" alt="June Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('july')">
-        <h3>July 2025</h3>
-        <img src="images/july/thumbnail.jpg" alt="July Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('august')">
-        <h3>August 2025</h3>
-        <img src="images/august/thumbnail.jpg" alt="August Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('september')">
-        <h3>September 2025</h3>
-        <img src="images/september/thumbnail.jpg" alt="September Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('october')">
-        <h3>October 2025</h3>
-        <img src="images/october/thumbnail.jpg" alt="October Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('november')">
-        <h3>November 2025</h3>
-        <img src="images/november/thumbnail.jpg" alt="November Photo">
-      </div>
-      <div class="month" onclick="loadPhotos('december')">
-        <h3>December 2025</h3>
-        <img src="images/december/thumbnail.jpg" alt="December Photo">
-      </div>
+      <!-- Add other months similarly -->
     </div>
     
     <div id="monthly-photos-gallery">
@@ -84,7 +49,7 @@
     </div>
   </section>
 
-  <!-- Weekend Movie List -->
+  <!-- Weekend Movie List Section -->
   <section id="movies">
     <h2>Weekend Movie List</h2>
     <ul id="movie-list">
@@ -98,6 +63,9 @@
     
     <form id="update-form">
       <textarea id="new-update" placeholder="Write a life update..." required></textarea><br>
+      
+      <input type="file" id="new-photo" accept="image/*"><br>
+      
       <button type="submit">Add Update</button>
     </form>
 
