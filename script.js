@@ -1,3 +1,18 @@
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDJTaZc-nPE7o5OKq_l0CY3A4sRdj2EsuU",
+  authDomain: "life-update-5ddea.firebaseapp.com",
+  projectId: "life-update-5ddea",
+  storageBucket: "life-update-5ddea.firebasestorage.app",
+  messagingSenderId: "924844463709",
+  appId: "1:924844463709:web:e2dab2159069d891d7dfb4",
+  measurementId: "G-9VQM9S65KE"
+};
+
+// Initialize Firebase app
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 // Scroll to specific sections
 function scrollToSection(id) {
   document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
@@ -16,11 +31,29 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-  // Load life updates from localStorage
-  loadUpdatesFromLocalStorage();
+  // Load life updates from Firebase (Firestore)
+  loadLifeUpdatesFromFirebase();
 });
 
-// Function to load life updates from localStorage
+// Function to load life updates from Firebase
+function loadLifeUpdatesFromFirebase() {
+  const updatesList = document.getElementById('updates-list');
+
+  // Fetch updates from Firestore
+  db.collection("lifeUpdates").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+    updatesList.innerHTML = '';  // Clear existing updates
+
+    querySnapshot.forEach((doc) => {
+      const update = doc.data();
+      
+      // Create a new div for each update from Firestore
+      const updateDiv = createUpdateDiv(update.text, update.photo, doc.id);
+      updatesList.appendChild(updateDiv);
+    });
+  });
+}
+
+// Function to load life updates from localStorage as fallback
 function loadUpdatesFromLocalStorage() {
   const savedUpdates = JSON.parse(localStorage.getItem('lifeUpdates')) || [];
   const updatesList = document.getElementById('updates-list');
@@ -32,7 +65,7 @@ function loadUpdatesFromLocalStorage() {
 }
 
 // Function to create a life update div (with delete button)
-function createUpdateDiv(updateText, photo) {
+function createUpdateDiv(updateText, photo, docId = null) {
   const updateDiv = document.createElement('div');
   updateDiv.classList.add('update');
 
@@ -54,7 +87,11 @@ function createUpdateDiv(updateText, photo) {
   deleteBtn.textContent = 'Delete Update';
   deleteBtn.onclick = function() {
     updateDiv.remove();
-    deleteUpdateFromLocalStorage(updateText); // Remove from localStorage
+    if (docId) {
+      deleteUpdateFromFirebase(docId); // Delete from Firestore
+    } else {
+      deleteUpdateFromLocalStorage(updateText); // Remove from localStorage
+    }
   };
 
   updateDiv.appendChild(deleteBtn);
@@ -70,21 +107,47 @@ document.getElementById('update-form').addEventListener('submit', function(event
 
   const updatesList = document.getElementById('updates-list');
 
-  // Create a new update div
-  const updateDiv = createUpdateDiv(updateText, photoFile ? URL.createObjectURL(photoFile) : null);
-
-  // Add the update div to the list
-  updatesList.appendChild(updateDiv);
-
-  // Save the new update in localStorage
-  saveUpdateToLocalStorage(updateText, photoFile ? URL.createObjectURL(photoFile) : null);
+  // Handle file upload if available
+  let photoURL = null;
+  if (photoFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      photoURL = e.target.result;
+      saveUpdateToFirebase(updateText, photoURL); // Save the update to Firebase
+    };
+    reader.readAsDataURL(photoFile);
+  } else {
+    saveUpdateToFirebase(updateText); // Save the update without photo
+  }
 
   // Clear the form
   document.getElementById('new-update').value = '';
   document.getElementById('new-photo').value = '';
 });
 
-// Save the update to localStorage
+// Save the update to Firebase
+function saveUpdateToFirebase(text, photoURL = null) {
+  db.collection("lifeUpdates").add({
+    text: text,
+    photo: photoURL,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp() // Timestamp for ordering updates
+  }).then(() => {
+    loadLifeUpdatesFromFirebase(); // Reload updates from Firebase
+  });
+}
+
+// Delete an update from Firebase
+function deleteUpdateFromFirebase(docId) {
+  db.collection("lifeUpdates").doc(docId).delete()
+    .then(() => {
+      console.log("Document successfully deleted!");
+    })
+    .catch((error) => {
+      console.error("Error removing document: ", error);
+    });
+}
+
+// Save the update to localStorage as a fallback
 function saveUpdateToLocalStorage(text, photo) {
   const savedUpdates = JSON.parse(localStorage.getItem('lifeUpdates')) || [];
   savedUpdates.push({ text, photo });
