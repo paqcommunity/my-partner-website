@@ -64,7 +64,16 @@ document.getElementById('update-form').addEventListener('submit', function(event
     reader.readAsDataURL(photoFile);
   }
 
-  // Append the new update to the list
+  // Create delete button for the update
+  const deleteBtn = document.createElement('button');
+  deleteBtn.classList.add('delete-update');
+  deleteBtn.textContent = 'Delete Update';
+  deleteBtn.onclick = function() {
+    updatesList.removeChild(updateDiv); // Remove the update when clicked
+  };
+
+  // Append the delete button and the update to the list
+  updateDiv.appendChild(deleteBtn);
   updatesList.appendChild(updateDiv);
 
   // Clear the form after submission

@@ -145,3 +145,18 @@ button:hover {
   border-radius: 8px;
   margin-top: 10px;
 }
+
+.delete-update {
+  background-color: #ff0000;
+  color: white;
+  padding: 5px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.delete-update:hover {
+  background-color: #cc0000;
+}
