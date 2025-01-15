@@ -1,0 +1,78 @@
+/* General Styling */
+body {
+  font-family: 'Verdana', sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: #fff8f0;
+  color: #333;
+}
+
+header {
+  background-color: #ffe6e6;
+  padding: 50px;
+  color: #ff4d4d;
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2em;
+}
+
+button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #ff1a1a;
+}
+
+/* Section Styling */
+section {
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+#timeline h2 {
+  color: #ff4d4d;
+}
+
+.event h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.event p {
+  font-size: 1em;
+  color: #555;
+}
+
+/* Gallery Styling */
+.gallery img {
+  width: 200px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+footer {
+  background-color: #ffe6e6;
+  color: #333;
+  padding: 10px;
+  font-size: 1em;
+  margin-top: 20px;
+}
