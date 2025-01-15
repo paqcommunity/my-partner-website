@@ -6,7 +6,12 @@ function scrollToSection(id) {
 // Load movie list dynamically
 document.addEventListener('DOMContentLoaded', () => {
   fetch('movies.json')
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch movies.json');
+      }
+      return response.json();
+    })
     .then(movies => {
       const movieList = document.getElementById('movie-list');
       movies.forEach(movie => {
@@ -14,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         li.textContent = `🎬 ${movie}`;
         movieList.appendChild(li);
       });
+    })
+    .catch(error => {
+      console.error('Error fetching the movie list:', error);
     });
 });
 
@@ -33,6 +41,7 @@ function loadPhotos(month) {
   images.forEach(src => {
     const img = document.createElement('img');
     img.src = src;
+    img.alt = `${month} photo`;
     gallery.appendChild(img);
   });
 }
