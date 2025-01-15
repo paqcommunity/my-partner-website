@@ -15,7 +15,88 @@ document.addEventListener('DOMContentLoaded', () => {
         movieList.appendChild(li);
       });
     });
+
+  // Load life updates from localStorage
+  loadUpdatesFromLocalStorage();
 });
+
+// Function to load life updates from localStorage
+function loadUpdatesFromLocalStorage() {
+  const savedUpdates = JSON.parse(localStorage.getItem('lifeUpdates')) || [];
+  const updatesList = document.getElementById('updates-list');
+
+  savedUpdates.forEach(update => {
+    const updateDiv = createUpdateDiv(update.text, update.photo);
+    updatesList.appendChild(updateDiv);
+  });
+}
+
+// Function to create a life update div (with delete button)
+function createUpdateDiv(updateText, photo) {
+  const updateDiv = document.createElement('div');
+  updateDiv.classList.add('update');
+
+  // Add text content
+  const textNode = document.createElement('p');
+  textNode.textContent = updateText;
+  updateDiv.appendChild(textNode);
+
+  // Add photo if available
+  if (photo) {
+    const img = document.createElement('img');
+    img.src = photo;
+    updateDiv.appendChild(img);
+  }
+
+  // Create delete button for the update
+  const deleteBtn = document.createElement('button');
+  deleteBtn.classList.add('delete-update');
+  deleteBtn.textContent = 'Delete Update';
+  deleteBtn.onclick = function() {
+    updateDiv.remove();
+    deleteUpdateFromLocalStorage(updateText); // Remove from localStorage
+  };
+
+  updateDiv.appendChild(deleteBtn);
+  return updateDiv;
+}
+
+// Handle form submission for adding life updates
+document.getElementById('update-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent page refresh on form submission
+
+  const updateText = document.getElementById('new-update').value;
+  const photoFile = document.getElementById('new-photo').files[0];
+
+  const updatesList = document.getElementById('updates-list');
+
+  // Create a new update div
+  const updateDiv = createUpdateDiv(updateText, photoFile ? URL.createObjectURL(photoFile) : null);
+
+  // Add the update div to the list
+  updatesList.appendChild(updateDiv);
+
+  // Save the new update in localStorage
+  saveUpdateToLocalStorage(updateText, photoFile ? URL.createObjectURL(photoFile) : null);
+
+  // Clear the form
+  document.getElementById('new-update').value = '';
+  document.getElementById('new-photo').value = '';
+});
+
+// Save the update to localStorage
+function saveUpdateToLocalStorage(text, photo) {
+  const savedUpdates = JSON.parse(localStorage.getItem('lifeUpdates')) || [];
+  savedUpdates.push({ text, photo });
+  localStorage.setItem('lifeUpdates', JSON.stringify(savedUpdates));
+}
+
+// Remove update from localStorage
+function deleteUpdateFromLocalStorage(updateText) {
+  const savedUpdates = JSON.parse(localStorage.getItem('lifeUpdates')) || [];
+  const updatedList = savedUpdates.filter(update => update.text !== updateText);
+  localStorage.setItem('lifeUpdates', JSON.stringify(updatedList));
+}
 
 // Function to load photos for a specific month
 function loadPhotos(month) {
@@ -36,47 +117,3 @@ function loadPhotos(month) {
     gallery.appendChild(img);
   });
 }
-
-// Function to handle the life update form submission
-document.getElementById('update-form').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent page refresh on form submission
-
-  const updateText = document.getElementById('new-update').value;
-  const photoFile = document.getElementById('new-photo').files[0];
-
-  const updatesList = document.getElementById('updates-list');
-
-  // Create a new div for the update
-  const updateDiv = document.createElement('div');
-  updateDiv.classList.add('update');
-  
-  // Add text content
-  updateDiv.textContent = updateText;
-
-  // Handle file upload if available
-  if (photoFile) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      updateDiv.appendChild(img);
-    };
-    reader.readAsDataURL(photoFile);
-  }
-
-  // Create delete button for the update
-  const deleteBtn = document.createElement('button');
-  deleteBtn.classList.add('delete-update');
-  deleteBtn.textContent = 'Delete Update';
-  deleteBtn.onclick = function() {
-    updatesList.removeChild(updateDiv); // Remove the update when clicked
-  };
-
-  // Append the delete button and the update to the list
-  updateDiv.appendChild(deleteBtn);
-  updatesList.appendChild(updateDiv);
-
-  // Clear the form after submission
-  document.getElementById('new-update').value = '';
-  document.getElementById('new-photo').value = '';
-});
